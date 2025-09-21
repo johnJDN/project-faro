@@ -1,0 +1,341 @@
+{
+  "predictions": [
+    { "team": "Jaguars", "win_probability": 78.6 },
+    { "team": "Packers", "win_probability": 74.3 },
+    { "team": "Colts", "win_probability": 73.8 },
+    { "team": "Falcons", "win_probability": 68.6 },
+    { "team": "Commanders", "win_probability": 66.5 },
+    { "team": "Chargers", "win_probability": 65.2 },
+    { "team": "Bengals", "win_probability": 61.4 },
+    { "team": "Seahawks", "win_probability": 60.9 },
+    { "team": "Ravens", "win_probability": 60.8 },
+    { "team": "Patriots", "win_probability": 59.5 },
+    { "team": "Buccaneers", "win_probability": 57.3 },
+    { "team": "Eagles", "win_probability": 57.2 },
+    { "team": "Bears", "win_probability": 56.5 },
+    { "team": "Giants", "win_probability": 54.8 },
+    { "team": "Cardinals", "win_probability": 51.2 }
+  ],
+  "props": [
+    {
+      "teams": {
+        "away": {
+          "name": "MIA Dolphins",
+          "spread": {
+            "line": 12.5,
+            "odds": -108
+          },
+          "moneyline": 575
+        },
+        "home": {
+          "name": "BUF Bills",
+          "spread": {
+            "line": -12.5,
+            "odds": -112
+          },
+          "moneyline": -850
+        }
+      }
+    },
+    {
+      "teams": {
+        "away": {
+          "name": "GB Packers",
+          "spread": {
+            "line": -8.5,
+            "odds": -110
+          },
+          "moneyline": -485
+        },
+        "home": {
+          "name": "CLE Browns",
+          "spread": {
+            "line": 8.5,
+            "odds": -110
+          },
+          "moneyline": 370
+        }
+      }
+    },
+    {
+      "teams": {
+        "away": {
+          "name": "NY Jets",
+          "spread": {
+            "line": 7,
+            "odds": -105
+          },
+          "moneyline": 285
+        },
+        "home": {
+          "name": "TB Buccaneers",
+          "spread": {
+            "line": -7,
+            "odds": -115
+          },
+          "moneyline": -360
+        }
+      }
+    },
+    {
+      "teams": {
+        "away": {
+          "name": "LA Rams",
+          "spread": {
+            "line": 3.5,
+            "odds": -115
+          },
+          "moneyline": 154
+        },
+        "home": {
+          "name": "PHI Eagles",
+          "spread": {
+            "line": -3.5,
+            "odds": -105
+          },
+          "moneyline": -185
+        }
+      }
+    },
+    {
+      "teams": {
+        "away": {
+          "name": "ATL Falcons",
+          "spread": {
+            "line": -5.5,
+            "odds": -108
+          },
+          "moneyline": -238
+        },
+        "home": {
+          "name": "CAR Panthers",
+          "spread": {
+            "line": 5.5,
+            "odds": -112
+          },
+          "moneyline": 195
+        }
+      }
+    },
+    {
+      "teams": {
+        "away": {
+          "name": "IND Colts",
+          "spread": {
+            "line": -4.5,
+            "odds": -105
+          },
+          "moneyline": -198
+        },
+        "home": {
+          "name": "TEN Titans",
+          "spread": {
+            "line": 4.5,
+            "odds": -115
+          },
+          "moneyline": 164
+        }
+      }
+    },
+    {
+      "teams": {
+        "away": {
+          "name": "LV Raiders",
+          "spread": {
+            "line": 3.5,
+            "odds": -112
+          },
+          "moneyline": 154
+        },
+        "home": {
+          "name": "WAS Commanders",
+          "spread": {
+            "line": -3.5,
+            "odds": -108
+          },
+          "moneyline": -185
+        }
+      }
+    },
+    {
+      "teams": {
+        "away": {
+          "name": "PIT Steelers",
+          "spread": {
+            "line": -1.5,
+            "odds": -115
+          },
+          "moneyline": -125
+        },
+        "home": {
+          "name": "NE Patriots",
+          "spread": {
+            "line": 1.5,
+            "odds": -105
+          },
+          "moneyline": 105
+        }
+      }
+    },
+    {
+      "teams": {
+        "away": {
+          "name": "CIN Bengals",
+          "spread": {
+            "line": 3,
+            "odds": -105
+          },
+          "moneyline": 145
+        },
+        "home": {
+          "name": "MIN Vikings",
+          "spread": {
+            "line": -3,
+            "odds": -115
+          },
+          "moneyline": -175
+        }
+      }
+    },
+    {
+      "teams": {
+        "away": {
+          "name": "HOU Texans",
+          "spread": {
+            "line": 1.5,
+            "odds": -110
+          },
+          "moneyline": 105
+        },
+        "home": {
+          "name": "JAX Jaguars",
+          "spread": {
+            "line": -1.5,
+            "odds": -110
+          },
+          "moneyline": -125
+        }
+      }
+    },
+    {
+      "teams": {
+        "away": {
+          "name": "NO Saints",
+          "spread": {
+            "line": 7.5,
+            "odds": -110
+          },
+          "moneyline": 320
+        },
+        "home": {
+          "name": "SEA Seahawks",
+          "spread": {
+            "line": -7.5,
+            "odds": -110
+          },
+          "moneyline": -410
+        }
+      }
+    },
+    {
+      "teams": {
+        "away": {
+          "name": "DEN Broncos",
+          "spread": {
+            "line": 2.5,
+            "odds": -105
+          },
+          "moneyline": 130
+        },
+        "home": {
+          "name": "LA Chargers",
+          "spread": {
+            "line": -2.5,
+            "odds": -115
+          },
+          "moneyline": -155
+        }
+      }
+    },
+    {
+      "teams": {
+        "away": {
+          "name": "DAL Cowboys",
+          "spread": {
+            "line": -1.5,
+            "odds": -102
+          },
+          "moneyline": -118
+        },
+        "home": {
+          "name": "CHI Bears",
+          "spread": {
+            "line": 1.5,
+            "odds": -118
+          },
+          "moneyline": -102
+        }
+      }
+    },
+    {
+      "teams": {
+        "away": {
+          "name": "ARI Cardinals",
+          "spread": {
+            "line": 2.5,
+            "odds": -105
+          },
+          "moneyline": 136
+        },
+        "home": {
+          "name": "SF 49ers",
+          "spread": {
+            "line": -2.5,
+            "odds": -115
+          },
+          "moneyline": -162
+        }
+      }
+    },
+    {
+      "teams": {
+        "away": {
+          "name": "KC Chiefs",
+          "spread": {
+            "line": -6,
+            "odds": -110
+          },
+          "moneyline": -325
+        },
+        "home": {
+          "name": "NY Giants",
+          "spread": {
+            "line": 6,
+            "odds": -110
+          },
+          "moneyline": 260
+        }
+      }
+    },
+    {
+      "teams": {
+        "away": {
+          "name": "DET Lions",
+          "spread": {
+            "line": 4.5,
+            "odds": -108
+          },
+          "moneyline": 185
+        },
+        "home": {
+          "name": "BAL Ravens",
+          "spread": {
+            "line": -4.5,
+            "odds": -112
+          },
+          "moneyline": -225
+        }
+      }
+    }
+  ]
+}

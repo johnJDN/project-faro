@@ -61,6 +61,12 @@ def parse_args(argv: Optional[Iterable[str]] = None) -> argparse.Namespace:
         default=0,
         help="Limit output to the top N edges (0 keeps everything above the threshold).",
     )
+    parser.add_argument(
+        "--boost-profit-multiplier",
+        type=float,
+        default=1.0,
+        help="Multiplier applied to the profit when a bet wins (e.g. 1.5 = 50% boost).",
+    )
     return parser.parse_args(argv)
 
 
@@ -90,20 +96,33 @@ def american_to_decimal(odds: int) -> float:
     raise ValueError("American odds of 0 are invalid.")
 
 
-def american_to_implied_prob(odds: int) -> float:
-    return 1.0 / american_to_decimal(odds)
-
-
-def expected_value(prob: float, odds: int) -> float:
-    return prob * american_to_decimal(odds) - 1.0
-
-
-def kelly_fraction(prob: float, odds: int, multiplier: float = 0.25) -> float:
+def american_to_implied_prob(odds: int, profit_multiplier: float = 1.0) -> float:
     decimal = american_to_decimal(odds)
-    b = decimal - 1.0
-    if b <= 0:
+    profit = decimal - 1.0
+    boosted_decimal = 1.0 + profit * profit_multiplier
+    return 1.0 / boosted_decimal
+
+
+def expected_value(prob: float, odds: int, profit_multiplier: float = 1.0) -> float:
+    decimal = american_to_decimal(odds)
+    profit = decimal - 1.0
+    boosted_decimal = 1.0 + profit * profit_multiplier
+    return prob * boosted_decimal - 1.0
+
+
+def kelly_fraction(
+    prob: float,
+    odds: int,
+    multiplier: float = 0.25,
+    profit_multiplier: float = 1.0,
+) -> float:
+    decimal = american_to_decimal(odds)
+    profit = decimal - 1.0
+    boosted_profit = profit * profit_multiplier
+    if boosted_profit <= 0:
         return 0.0
-    fraction = (prob * decimal - 1.0) / b
+    boosted_decimal = 1.0 + boosted_profit
+    fraction = (prob * boosted_decimal - 1.0) / boosted_profit
     scaled = fraction * multiplier
     return max(0.0, min(1.0, scaled))
 
@@ -177,6 +196,7 @@ def evaluate_prediction(
     side: str,
     min_edge: float,
     margin_sd: float,
+    profit_multiplier: float,
 ) -> List[Evaluation]:
     teams = event["teams"]
     team_info = teams[side]
@@ -186,7 +206,7 @@ def evaluate_prediction(
 
     moneyline_odds = team_info.get("moneyline")
     if isinstance(moneyline_odds, int):
-        implied = american_to_implied_prob(moneyline_odds)
+        implied = american_to_implied_prob(moneyline_odds, profit_multiplier)
         edge = prediction.win_probability - implied
         if edge >= min_edge:
             results.append(
@@ -200,8 +220,14 @@ def evaluate_prediction(
                     implied_prob=implied,
                     model_prob=prediction.win_probability,
                     edge=edge,
-                    expected_value=expected_value(prediction.win_probability, moneyline_odds),
-                    kelly_fraction=kelly_fraction(prediction.win_probability, moneyline_odds),
+                    expected_value=expected_value(
+                        prediction.win_probability, moneyline_odds, profit_multiplier
+                    ),
+                    kelly_fraction=kelly_fraction(
+                        prediction.win_probability,
+                        moneyline_odds,
+                        profit_multiplier=profit_multiplier,
+                    ),
                 )
             )
 
@@ -215,7 +241,7 @@ def evaluate_prediction(
         spread_line = float(spread["line"])
         spread_odds = spread["odds"]
         cover_prob = cover_probability(prediction.expected_margin, spread_line, margin_sd)
-        implied = american_to_implied_prob(spread_odds)
+        implied = american_to_implied_prob(spread_odds, profit_multiplier)
         edge = cover_prob - implied
         if edge >= min_edge:
             results.append(
@@ -229,8 +255,16 @@ def evaluate_prediction(
                     implied_prob=implied,
                     model_prob=cover_prob,
                     edge=edge,
-                    expected_value=expected_value(cover_prob, spread_odds),
-                    kelly_fraction=kelly_fraction(cover_prob, spread_odds),
+                    expected_value=expected_value(
+                        cover_prob,
+                        spread_odds,
+                        profit_multiplier,
+                    ),
+                    kelly_fraction=kelly_fraction(
+                        cover_prob,
+                        spread_odds,
+                        profit_multiplier=profit_multiplier,
+                    ),
                 )
             )
     return results
@@ -241,6 +275,7 @@ def score_props(
     props: List[Dict[str, Any]],
     min_edge: float,
     margin_sd: float,
+    profit_multiplier: float,
 ) -> Tuple[List[Evaluation], List[str]]:
     recommendations: List[Evaluation] = []
     unmatched: List[str] = []
@@ -251,7 +286,14 @@ def score_props(
             continue
         event, side = matched
         recommendations.extend(
-            evaluate_prediction(prediction, event, side, min_edge, margin_sd)
+            evaluate_prediction(
+                prediction,
+                event,
+                side,
+                min_edge,
+                margin_sd,
+                profit_multiplier,
+            )
         )
     recommendations.sort(key=lambda item: item.edge, reverse=True)
     return recommendations, unmatched
@@ -272,7 +314,16 @@ def main(argv: Optional[Iterable[str]] = None) -> None:
         raise DataError("`props` must be a list.")
 
     predictions = parse_predictions(predictions_raw)
-    recommendations, unmatched = score_props(predictions, props_raw, args.min_edge, args.margin_sd)
+    if args.boost_profit_multiplier <= 0:
+        raise DataError("--boost-profit-multiplier must be greater than 0.")
+
+    recommendations, unmatched = score_props(
+        predictions,
+        props_raw,
+        args.min_edge,
+        args.margin_sd,
+        args.boost_profit_multiplier,
+    )
 
     if unmatched:
         print(
@@ -288,7 +339,8 @@ def main(argv: Optional[Iterable[str]] = None) -> None:
         recommendations = recommendations[: args.top]
 
     print(
-        f"Recommended plays with edge ≥ {args.min_edge * 100:.2f}% (margin_sd={args.margin_sd:.2f}):"
+        f"Recommended plays with edge ≥ {args.min_edge * 100:.2f}% "
+        f"(margin_sd={args.margin_sd:.2f}, boost={args.boost_profit_multiplier:.2f}× profit):"
     )
     for rec in recommendations:
         edge_pct = rec.edge * 100.0
